@@ -62,8 +62,8 @@ private:
     juce::Synthesiser mSampler; //'m' as member variable, have to use juce:: as header is not found
     const int mNumVoices{ 3 }; //number of sampler voices
 
-    AudioFormatManager mFormatManager;
-    AudioFormatReader* mFormatReader { nullptr }; //pointer used if we re-select another file (just point somewhere else)
+    juce::AudioFormatManager mFormatManager; 
+    juce::AudioFormatReader* mFormatReader { nullptr }; //pointer used if we re-select another file (just point somewhere else)
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HelloSamplerAudioProcessor)

@@ -24,6 +24,8 @@ HelloSamplerAudioProcessor::HelloSamplerAudioProcessor() //VST Constructor
                        )
 #endif
 {
+    mFormatManager.registerBasicFormats(); //allows us to use wav,mp3, etc
+
     for (int i = 0; i < mNumVoices; i++) //Creates 3 sampler voices that we can call on within out sampler
     {
         mSampler.addVoice(new SamplerVoice());
@@ -32,6 +34,7 @@ HelloSamplerAudioProcessor::HelloSamplerAudioProcessor() //VST Constructor
 
 HelloSamplerAudioProcessor::~HelloSamplerAudioProcessor()
 {
+    mFormatReader = nullptr; //plugin setback to nullptr when closed
 }
 
 //==============================================================================
@@ -192,10 +195,12 @@ void HelloSamplerAudioProcessor::setStateInformation (const void* data, int size
 void HelloSamplerAudioProcessor::loadFile() //loadfile function
 {
 
-    FileChooser chooser{ "Please load a file" }; //dialogbox
+    juce::FileChooser chooser{ "Please load a file" }; //opens dialogbox
 
     if (chooser.browseForFileToOpen())
     {
+        auto file = chooser.getResult(); //if we choose a file its stored in 'file
+        mFormatReader = mFormatManager.createReaderFor(file); //reader is created
 
     }
 
