@@ -192,6 +192,13 @@ void HelloSamplerAudioProcessor::setStateInformation (const void* data, int size
 void HelloSamplerAudioProcessor::loadFile() //loadfile function
 {
 
+    FileChooser chooser{ "Please load a file" }; //dialogbox
+
+    if (chooser.browseForFileToOpen())
+    {
+
+    }
+
 }
 
 //==============================================================================
