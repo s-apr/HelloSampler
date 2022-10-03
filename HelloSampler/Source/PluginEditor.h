@@ -25,6 +25,8 @@ public:
     void resized() override;
 
 private:
+    juce::TextButton mLoadButton{ "Load Sample" }; //Inital button for sample loading
+
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     HelloSamplerAudioProcessor& audioProcessor;

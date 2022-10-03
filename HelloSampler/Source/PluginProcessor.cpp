@@ -24,7 +24,7 @@ HelloSamplerAudioProcessor::HelloSamplerAudioProcessor() //VST Constructor
                        )
 #endif
 {
-    for (int i = 0; i < mNumVoices; i++)
+    for (int i = 0; i < mNumVoices; i++) //Creates 3 sampler voices that we can call on within out sampler
     {
         mSampler.addVoice(new SamplerVoice());
     }
@@ -187,6 +187,11 @@ void HelloSamplerAudioProcessor::setStateInformation (const void* data, int size
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+}
+
+void HelloSamplerAudioProcessor::loadFile() //loadfile function
+{
+
 }
 
 //==============================================================================
