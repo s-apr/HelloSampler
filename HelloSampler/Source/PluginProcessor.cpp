@@ -9,8 +9,10 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+using namespace juce;
+
 //==============================================================================
-HelloSamplerAudioProcessor::HelloSamplerAudioProcessor()
+HelloSamplerAudioProcessor::HelloSamplerAudioProcessor() //VST Constructor
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
@@ -22,6 +24,10 @@ HelloSamplerAudioProcessor::HelloSamplerAudioProcessor()
                        )
 #endif
 {
+    for (int i = 0; i < mNumVoices; i++)
+    {
+        mSampler.addVoice(new SamplerVoice());
+    }
 }
 
 HelloSamplerAudioProcessor::~HelloSamplerAudioProcessor()

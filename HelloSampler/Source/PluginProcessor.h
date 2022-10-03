@@ -58,6 +58,7 @@ public:
 
 private:
     juce::Synthesiser mSampler; //'m' as member variable, have to use juce:: as header is not found
+    const int mNumVoices{ 3 }; //number of sampler voices
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HelloSamplerAudioProcessor)
