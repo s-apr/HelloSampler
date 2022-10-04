@@ -13,8 +13,8 @@
 HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSamplerAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    mLoadButton.onClick = [&]() { audioProcessor.loadFile(); }; //Load Button Constructor
-    addAndMakeVisible(mLoadButton);
+    //mLoadButton.onClick = [&]() { audioProcessor.loadFile(); }; //Load Button Constructor
+    //addAndMakeVisible(mLoadButton);
 
     setSize (200, 200);
 }
@@ -26,18 +26,26 @@ HelloSamplerAudioProcessorEditor::~HelloSamplerAudioProcessorEditor()
 //==============================================================================
 void HelloSamplerAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    g.fillAll(juce::Colours::black);
 
-    g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    g.setColour(juce::Colours::white);
+    g.setFont(15.0f);
+
+    if (audioProcessor.getNumSamplerSounds() > 0)
+    {
+        g.fillAll(juce::Colours::lightgrey);
+        g.drawText("Sound Loaded", getWidth() / 2 - 50, getHeight() / 2 - 10, 100, 20, juce::Justification::centred);
+    }
+    else
+    {
+        g.drawText("Load a sound", getWidth() / 2 - 50, getHeight() / 2 - 10, 100, 20, juce::Justification::centred);
+    }
 }
 
 void HelloSamplerAudioProcessorEditor::resized()
 {
 
-    mLoadButton.setBounds(getWidth() / 2 - 50, getHeight() / 2 - 50, 100, 100);
+    //mLoadButton.setBounds(getWidth() / 2 - 50, getHeight() / 2 - 50, 100, 100);
 
 }
 
@@ -63,4 +71,7 @@ void HelloSamplerAudioProcessorEditor::filesDropped(const juce::StringArray& fil
             audioProcessor.loadFile(file);
         }
     }
+
+    repaint();
+
 }

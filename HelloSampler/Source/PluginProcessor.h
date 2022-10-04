@@ -59,6 +59,8 @@ public:
     void loadFile(); //Load File Function
     void loadFile(const juce::String& path);
 
+    int getNumSamplerSounds() { return mSampler.getNumSounds(); }
+
 private:
     juce::Synthesiser mSampler; //'m' as member variable, have to use juce:: as header is not found
     const int mNumVoices{ 3 }; //number of sampler voices
