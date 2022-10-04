@@ -40,3 +40,27 @@ void HelloSamplerAudioProcessorEditor::resized()
     mLoadButton.setBounds(getWidth() / 2 - 50, getHeight() / 2 - 50, 100, 100);
 
 }
+
+bool HelloSamplerAudioProcessorEditor::isInterestedInFileDrag(const juce::StringArray& files) //calls IIFile Drag (is it a valid file?)
+{
+    for (auto file : files)//traverse through string array 'files'
+    {
+        if (file.contains("wav") || file.contains("mp3") || file.contains("aif")) //checks file extentions
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void HelloSamplerAudioProcessorEditor::filesDropped(const juce::StringArray& files, int x, int y) //calls when file is dropped
+{
+    for (auto file : files) //traverse through string array 'files'
+    {
+        if (isInterestedInFileDrag(files))
+        {
+            //load path
+        }
+    }
+}

@@ -14,7 +14,7 @@
 //==============================================================================
 /**
 */
-class HelloSamplerAudioProcessorEditor  : public juce::AudioProcessorEditor
+class HelloSamplerAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::FileDragAndDropTarget
 {
 public:
     HelloSamplerAudioProcessorEditor (HelloSamplerAudioProcessor&);
@@ -23,6 +23,9 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+
+    bool juce::FileDragAndDropTarget::isInterestedInFileDrag(const juce::StringArray& files); //override;
+    void juce::FileDragAndDropTarget::filesDropped(const juce::StringArray& files, int x, int y);
 
 private:
     juce::TextButton mLoadButton{ "Load Sample" }; //Inital button for sample loading
