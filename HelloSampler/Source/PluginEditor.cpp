@@ -58,9 +58,9 @@ void HelloSamplerAudioProcessorEditor::filesDropped(const juce::StringArray& fil
 {
     for (auto file : files) //traverse through string array 'files'
     {
-        if (isInterestedInFileDrag(files))
+        if (isInterestedInFileDrag(file))
         {
-            //load path
+            audioProcessor.loadFile(file);
         }
     }
 }

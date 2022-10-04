@@ -57,6 +57,7 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     void loadFile(); //Load File Function
+    void loadFile(const juce::String& path);
 
 private:
     juce::Synthesiser mSampler; //'m' as member variable, have to use juce:: as header is not found
