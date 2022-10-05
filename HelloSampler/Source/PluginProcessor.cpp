@@ -207,10 +207,12 @@ void HelloSamplerAudioProcessor::loadFile(const juce::String& path) //loadfile p
     juce::BigInteger range;
     range.setRange(0, 128, true);
 
-    auto file = File(path);
+    auto file = juce::File(path);
     mFormatReader = mFormatManager.createReaderFor(file);
 
     mSampler.addSound(new juce::SamplerSound("Sample", *mFormatReader, range, 60, 0.1, 0.1, 10.0));
+
+    if (mFormatReader != nullptr) delete mFormatReader; //stop memleak
 
 }
 
