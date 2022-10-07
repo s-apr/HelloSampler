@@ -30,6 +30,9 @@ public:
 private:
     //juce::TextButton mLoadButton; //Inital button for sample loading
 
+    std::vector<float> mAudioPoints;
+    bool mShouldBePainting{ false };
+
     HelloSamplerAudioProcessor& audioProcessor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HelloSamplerAudioProcessorEditor)

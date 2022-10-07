@@ -60,10 +60,12 @@ public:
     void loadFile(const juce::String& path);
 
     int getNumSamplerSounds() { return mSampler.getNumSounds(); }
+    juce::AudioBuffer<float>& getWaveForm() { return mWaveForm; }
 
 private:
     juce::Synthesiser mSampler; //'m' as member variable, have to use juce:: as header is not found
     const int mNumVoices{ 3 }; //number of sampler voices
+    juce::AudioBuffer<float> mWaveForm;
 
     juce::AudioFormatManager mFormatManager; 
     juce::AudioFormatReader* mFormatReader { nullptr }; //pointer used if we re-select another file (just point somewhere else)
