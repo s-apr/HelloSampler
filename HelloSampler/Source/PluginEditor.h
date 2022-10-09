@@ -28,10 +28,11 @@ public:
     void juce::FileDragAndDropTarget::filesDropped(const juce::StringArray& files, int x, int y);
 
 private:
-    //juce::TextButton mLoadButton; //Inital button for sample loading
-
     std::vector<float> mAudioPoints;
     bool mShouldBePainting{ false };
+
+    juce::Slider mAttackSlider, mDecaySlider, mSustainSlider, mReleaseSlider; //defining slider classes
+    juce::Label mAttackLabel, mDecayLabel, mSustainLabel, mReleaseLabel; //displays text string
 
     HelloSamplerAudioProcessor& audioProcessor;
 

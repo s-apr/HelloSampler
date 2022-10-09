@@ -11,16 +11,55 @@
 
 //==============================================================================
 HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSamplerAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+    : AudioProcessorEditor (&p), audioProcessor (p) //construction (same name as class)
 {
-    //mLoadButton.onClick = [&]() { audioProcessor.loadFile(); }; //Load Button Constructor
-    //addAndMakeVisible(mLoadButton);
+    mAttackSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag); //initialising sliders for GUI
+    mAttackSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20 );
+    mAttackSlider.setRange(0.0, 5.0, 0.01);
+    addAndMakeVisible(mAttackSlider);
+
+        mAttackLabel.setFont(10.f);
+        mAttackLabel.setText("Attack", juce::NotificationType::dontSendNotification);
+        mAttackLabel.setJustificationType(juce::Justification::centredTop);
+        mAttackLabel.attachToComponent(&mAttackSlider, false); //pointer to AttackSlider [attatched label to component
+
+    mDecaySlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag); //initialising sliders for GUI
+    mDecaySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
+    mDecaySlider.setRange(0.0, 5.0, 0.01);
+    addAndMakeVisible(mDecaySlider);
+
+        mDecayLabel.setFont(10.f);
+        mDecayLabel.setText("Decay", juce::NotificationType::dontSendNotification);
+        mDecayLabel.setJustificationType(juce::Justification::centredTop);
+        mDecayLabel.attachToComponent(&mDecaySlider, false); //pointer to AttackSlider [attatched label to component
+
+    mSustainSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag); //initialising sliders for GUI
+    mSustainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
+    mSustainSlider.setRange(0.0, 1.0, 0.01);
+    addAndMakeVisible(mSustainSlider);
+
+        mSustainLabel.setFont(10.f);
+        mSustainLabel.setText("Sustain", juce::NotificationType::dontSendNotification);
+        mSustainLabel.setJustificationType(juce::Justification::centredTop);
+        mSustainLabel.attachToComponent(&mSustainSlider, false); //pointer to AttackSlider [attatched label to component
+
+    mReleaseSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag); //initialising sliders for GUI
+    mReleaseSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
+    mReleaseSlider.setRange(0.0, 5.0, 0.01);
+    addAndMakeVisible(mReleaseSlider);
+
+        mReleaseLabel.setFont(10.f);
+        mReleaseLabel.setText("Release", juce::NotificationType::dontSendNotification);
+        mReleaseLabel.setJustificationType(juce::Justification::centredTop);
+        mReleaseLabel.attachToComponent(&mReleaseSlider, false); //pointer to AttackSlider [attatched label to component
+
 
     setSize (600, 200);
 }
 
 HelloSamplerAudioProcessorEditor::~HelloSamplerAudioProcessorEditor()
 {
+
 }
 
 //==============================================================================
@@ -32,7 +71,7 @@ void HelloSamplerAudioProcessorEditor::paint (juce::Graphics& g)
     if (mShouldBePainting)
     {
         juce::Path p;
-        p.clear();
+        mAudioPoints.clear();
 
         auto waveform = audioProcessor.getWaveForm();
         auto ratio = waveform.getNumSamples() / getWidth();
@@ -58,25 +97,19 @@ void HelloSamplerAudioProcessorEditor::paint (juce::Graphics& g)
         mShouldBePainting = false;
     }
 
-
-    //g.setColour(juce::Colours::white);
-    //g.setFont(15.0f);
-
-    //if (audioProcessor.getNumSamplerSounds() > 0)
-    //{
-    //    g.fillAll(juce::Colours::blueviolet);
-    //    g.drawText("Sound Loaded", getWidth() / 2 - 50, getHeight() / 2 - 10, 100, 20, juce::Justification::centred);
-    //}
-    //else
-    //{
-    //    g.drawText("Load a sound", getWidth() / 2 - 50, getHeight() / 2 - 10, 100, 20, juce::Justification::centred);
-    //}
 }
 
 void HelloSamplerAudioProcessorEditor::resized()
 {
+    const auto startX = 0.6f; //useful if I need to change values in all dials
+    const auto startY = 0.6f;
+    const auto dialWidth = 0.1f;
+    const auto dialHeight = 0.4f;
 
-    //mLoadButton.setBounds(getWidth() / 2 - 50, getHeight() / 2 - 50, 100, 100);
+    mAttackSlider.setBoundsRelative(startX, startY, dialWidth, dialHeight);
+    mDecaySlider.setBoundsRelative(startX + dialWidth, startY, dialWidth, dialHeight);
+    mSustainSlider.setBoundsRelative(startX + (dialWidth * 2), startY, dialWidth, dialHeight);
+    mReleaseSlider.setBoundsRelative(startX + (dialWidth * 3), startY, dialWidth, dialHeight);
 
 }
 
