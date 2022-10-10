@@ -13,9 +13,12 @@
 HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSamplerAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p) //construction (same name as class)
 {
+
+    //attack
     mAttackSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag); //initialising sliders for GUI
     mAttackSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20 );
     mAttackSlider.setRange(0.0, 5.0, 0.01);
+    mAttackSlider.addListener(this);
     addAndMakeVisible(mAttackSlider);
 
         mAttackLabel.setFont(10.f);
@@ -23,9 +26,11 @@ HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSampler
         mAttackLabel.setJustificationType(juce::Justification::centredTop);
         mAttackLabel.attachToComponent(&mAttackSlider, false); //pointer to AttackSlider [attatched label to component
 
+    //decay
     mDecaySlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag); //initialising sliders for GUI
     mDecaySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
     mDecaySlider.setRange(0.0, 5.0, 0.01);
+    mDecaySlider.addListener(this);
     addAndMakeVisible(mDecaySlider);
 
         mDecayLabel.setFont(10.f);
@@ -33,9 +38,12 @@ HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSampler
         mDecayLabel.setJustificationType(juce::Justification::centredTop);
         mDecayLabel.attachToComponent(&mDecaySlider, false); //pointer to AttackSlider [attatched label to component
 
+
+    //sustain
     mSustainSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag); //initialising sliders for GUI
     mSustainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
     mSustainSlider.setRange(0.0, 1.0, 0.01);
+    mSustainSlider.addListener(this);
     addAndMakeVisible(mSustainSlider);
 
         mSustainLabel.setFont(10.f);
@@ -43,9 +51,12 @@ HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSampler
         mSustainLabel.setJustificationType(juce::Justification::centredTop);
         mSustainLabel.attachToComponent(&mSustainSlider, false); //pointer to AttackSlider [attatched label to component
 
+    
+    //release 
     mReleaseSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag); //initialising sliders for GUI
     mReleaseSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
     mReleaseSlider.setRange(0.0, 5.0, 0.01);
+    mReleaseSlider.addListener(this);
     addAndMakeVisible(mReleaseSlider);
 
         mReleaseLabel.setFont(10.f);
@@ -138,5 +149,24 @@ void HelloSamplerAudioProcessorEditor::filesDropped(const juce::StringArray& fil
     }
 
     repaint();
+}
 
+void HelloSamplerAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
+{
+    if (slider == &mAttackSlider)
+    {
+        audioProcessor.attack = mAttackSlider.getValue();
+    }
+    else if (slider == &mDecaySlider)
+    {
+        audioProcessor.decay = mDecaySlider.getValue();
+    }
+    else if(slider == &mSustainSlider)
+    {
+        audioProcessor.sustain = mSustainSlider.getValue();
+    }
+    else if (slider == &mReleaseSlider)
+    {
+        audioProcessor.release = mReleaseSlider.getValue();
+    }
 }

@@ -62,6 +62,13 @@ public:
     int getNumSamplerSounds() { return mSampler.getNumSounds(); }
     juce::AudioBuffer<float>& getWaveForm() { return mWaveForm; }
 
+    void getADSRValue();
+
+    float attack = { 0.0 };
+    float decay = { 0.0 };
+    float sustain = { 0.0 };
+    float release = { 0.0 };
+
 private:
     juce::Synthesiser mSampler; //'m' as member variable, have to use juce:: as header is not found
     const int mNumVoices{ 3 }; //number of sampler voices

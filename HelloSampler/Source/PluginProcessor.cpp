@@ -150,11 +150,14 @@ void HelloSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
     mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
+    getADSRValue(); //toberemoved
+
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer (channel);
 
     }
+
 }
 
 //==============================================================================
@@ -217,16 +220,17 @@ void HelloSamplerAudioProcessor::loadFile(const juce::String& path) //loadfile p
 
     auto buffer = mWaveForm.getReadPointer(0);
 
-    //for (int sample = 0; sample < mWaveForm.getNumSamples(); ++sample)
-    //{
-    //    DBG(buffer[sample]); //check for buffer reading [will print -1 - 1 value of loaded file
-    //}
-
     mSampler.addSound(new juce::SamplerSound("Sample", *mFormatReader, range, 60/*c4*/, 0.1, 0.1, 10.0));
 
     if (mFormatReader != nullptr) delete mFormatReader; //stop memleak
 
 }
+
+void HelloSamplerAudioProcessor::getADSRValue()
+{
+    DBG("Attack: " << attack << " Decay: " << decay << " Sustain: " << sustain << " Release: " << release); //test if connections work
+}
+
 
 //==============================================================================
 // This creates new instances of the plugin..

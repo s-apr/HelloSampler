@@ -14,7 +14,7 @@
 //==============================================================================
 /**
 */
-class HelloSamplerAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::FileDragAndDropTarget
+class HelloSamplerAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::FileDragAndDropTarget, juce::Slider::Listener
 {
 public:
     HelloSamplerAudioProcessorEditor (HelloSamplerAudioProcessor&);
@@ -24,8 +24,11 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
-    bool juce::FileDragAndDropTarget::isInterestedInFileDrag(const juce::StringArray& files); //override;
-    void juce::FileDragAndDropTarget::filesDropped(const juce::StringArray& files, int x, int y);
+    bool isInterestedInFileDrag(const juce::StringArray& files); //override;
+    void filesDropped(const juce::StringArray& files, int x, int y);
+
+    void sliderValueChanged(juce::Slider* slider);
+    //void juce::Slider::Listener::sliderValueChanged(Slider* slider);
 
 private:
     std::vector<float> mAudioPoints;
