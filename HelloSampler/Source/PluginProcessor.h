@@ -62,7 +62,11 @@ public:
     int getNumSamplerSounds() { return mSampler.getNumSounds(); }
     juce::AudioBuffer<float>& getWaveForm() { return mWaveForm; }
 
-    void getADSRValue();
+    void updateADSR();
+
+    juce::ADSR::Parameters& getADSRParams() { return mADSRParams; } //referencing private object mADSRParams 
+                                                                    //so we are able to access the 'ADSR' member variables & attatch them
+                                                                    //to the sliders
 
     float attack = { 0.0 };
     float decay = { 0.0 };
@@ -73,6 +77,8 @@ private:
     juce::Synthesiser mSampler; //'m' as member variable, have to use juce:: as header is not found
     const int mNumVoices{ 3 }; //number of sampler voices
     juce::AudioBuffer<float> mWaveForm;
+
+    juce::ADSR::Parameters mADSRParams; //holds Attack, Decay, Sustain and Release times (ACTUAL FUNCTION FOR IT)
 
     juce::AudioFormatManager mFormatManager; 
     juce::AudioFormatReader* mFormatReader { nullptr }; //pointer used if we re-select another file (just point somewhere else)

@@ -103,6 +103,7 @@ void HelloSamplerAudioProcessor::changeProgramName (int index, const juce::Strin
 void HelloSamplerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     mSampler.setCurrentPlaybackSampleRate(sampleRate);
+
 }
 
 void HelloSamplerAudioProcessor::releaseResources()
@@ -149,8 +150,6 @@ void HelloSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
 
     mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-
-    getADSRValue(); //toberemoved
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
@@ -226,9 +225,20 @@ void HelloSamplerAudioProcessor::loadFile(const juce::String& path) //loadfile p
 
 }
 
-void HelloSamplerAudioProcessor::getADSRValue()
+void HelloSamplerAudioProcessor::updateADSR()
 {
-    DBG("Attack: " << attack << " Decay: " << decay << " Sustain: " << sustain << " Release: " << release); //test if connections work
+    //getting the number of sounds in the sampler
+    for (int i = 0; i < mSampler.getNumSounds(); i++) {
+
+        /*The Synthesiser class has two dervied classes[SynthesiserSound & SamplerSound]
+        we need to downcast from the Synthesiser class to SamplerSound*/
+        if (auto sound = dynamic_cast<SamplerSound*>(mSampler.getSound(i).get())) //retreive sound from the sampler & DOWNcast to SamplerSound
+        {
+
+            sound->setEnvelopeParameters(mADSRParams); //envelope is set each time ADSR sliders are changed
+
+        }
+    }
 }
 
 
