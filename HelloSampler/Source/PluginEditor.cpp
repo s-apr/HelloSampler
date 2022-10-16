@@ -18,7 +18,6 @@ HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSampler
     mAttackSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag); //initialising sliders for GUI
     mAttackSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20 );
     mAttackSlider.setRange(0.0, 5.0, 0.01);
-    mAttackSlider.addListener(this);
     addAndMakeVisible(mAttackSlider);
 
         mAttackLabel.setFont(10.f);
@@ -26,11 +25,12 @@ HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSampler
         mAttackLabel.setJustificationType(juce::Justification::centredTop);
         mAttackLabel.attachToComponent(&mAttackSlider, false); //pointer to AttackSlider [attatched label to component
 
+        mAttackAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "ATTACK", mAttackSlider);
+
     //decay
     mDecaySlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag); //initialising sliders for GUI
     mDecaySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
     mDecaySlider.setRange(0.0, 5.0, 0.01);
-    mDecaySlider.addListener(this);
     addAndMakeVisible(mDecaySlider);
 
         mDecayLabel.setFont(10.f);
@@ -38,12 +38,12 @@ HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSampler
         mDecayLabel.setJustificationType(juce::Justification::centredTop);
         mDecayLabel.attachToComponent(&mDecaySlider, false); //pointer to AttackSlider [attatched label to component
 
+        mDecayAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "DECAY", mDecaySlider);
 
     //sustain
     mSustainSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag); //initialising sliders for GUI
     mSustainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
     mSustainSlider.setRange(0.0, 1.0, 0.01);
-    mSustainSlider.addListener(this);
     addAndMakeVisible(mSustainSlider);
 
         mSustainLabel.setFont(10.f);
@@ -51,12 +51,12 @@ HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSampler
         mSustainLabel.setJustificationType(juce::Justification::centredTop);
         mSustainLabel.attachToComponent(&mSustainSlider, false); //pointer to AttackSlider [attatched label to component
 
+        mSustainAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "SUSTAIN", mSustainSlider);
     
     //release 
     mReleaseSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag); //initialising sliders for GUI
     mReleaseSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 40, 20);
     mReleaseSlider.setRange(0.0, 5.0, 0.01);
-    mReleaseSlider.addListener(this);
     addAndMakeVisible(mReleaseSlider);
 
         mReleaseLabel.setFont(10.f);
@@ -64,6 +64,7 @@ HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSampler
         mReleaseLabel.setJustificationType(juce::Justification::centredTop);
         mReleaseLabel.attachToComponent(&mReleaseSlider, false); //pointer to AttackSlider [attatched label to component
 
+        mReleaseAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.getAPVTS(), "RELEASE", mReleaseSlider);
 
     setSize (600, 200);
 }
@@ -149,28 +150,4 @@ void HelloSamplerAudioProcessorEditor::filesDropped(const juce::StringArray& fil
     }
 
     repaint();
-}
-
-void HelloSamplerAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
-{
-    if (slider == &mAttackSlider)
-    {
-        audioProcessor.getADSRParams().attack = mAttackSlider.getValue();
-    }
-    else if (slider == &mDecaySlider)
-    {
-        audioProcessor.getADSRParams().decay = mDecaySlider.getValue();
-    }
-    else if(slider == &mSustainSlider)
-    {
-        audioProcessor.getADSRParams().sustain = mSustainSlider.getValue();
-    }
-    else if (slider == &mReleaseSlider)
-    {
-        audioProcessor.getADSRParams().release = mReleaseSlider.getValue();
-    }
-
-    audioProcessor.updateADSR(); //when any sliders are changed the values are updated within the
-                                 //updateADSR function in PluginProcessor.cpp
-
 }

@@ -14,7 +14,7 @@
 //==============================================================================
 /**
 */
-class HelloSamplerAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::FileDragAndDropTarget, juce::Slider::Listener
+class HelloSamplerAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::FileDragAndDropTarget
 {
 public:
     HelloSamplerAudioProcessorEditor (HelloSamplerAudioProcessor&);
@@ -27,9 +27,6 @@ public:
     bool isInterestedInFileDrag(const juce::StringArray& files); //override;
     void filesDropped(const juce::StringArray& files, int x, int y);
 
-    void sliderValueChanged(juce::Slider* slider);
-    //void juce::Slider::Listener::sliderValueChanged(Slider* slider);
-
 private:
     std::vector<float> mAudioPoints;
     bool mShouldBePainting{ false };
@@ -37,7 +34,12 @@ private:
     juce::Slider mAttackSlider, mDecaySlider, mSustainSlider, mReleaseSlider; //defining slider classes
     juce::Label mAttackLabel, mDecayLabel, mSustainLabel, mReleaseLabel; //displays text string
 
-    HelloSamplerAudioProcessor& audioProcessor;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mAttackAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mDecayAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mSustainAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mReleaseAttachment;
+
+    HelloSamplerAudioProcessor& audioProcessor; //reference to audioProcesser to access member variables
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HelloSamplerAudioProcessorEditor)
 };

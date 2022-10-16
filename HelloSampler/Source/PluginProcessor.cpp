@@ -21,10 +21,11 @@ HelloSamplerAudioProcessor::HelloSamplerAudioProcessor() //VST Constructor
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), mAPVTS(*this, nullptr, "PARAMETERS", createParameters())
 #endif
 {
     mFormatManager.registerBasicFormats(); //allows us to use wav,mp3, etc
+    mAPVTS.state.juce::ValueTree::addListener(this);
 
     for (int i = 0; i < mNumVoices; i++) //Creates 3 sampler voices that we can call on within out sampler
     {
@@ -148,14 +149,22 @@ void HelloSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-
-    mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    //mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer (channel);
 
     }
+
+    if (mShouldUpdate)
+    {
+
+        updateADSR();
+
+    }
+
+    mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
 }
 
@@ -200,6 +209,8 @@ void HelloSamplerAudioProcessor::loadFile() //loadfile function
         mSampler.addSound(new juce::SamplerSound("Sample", *mFormatReader, range, 60, 0.1, 0.1, 10.0)); //Adding new sampler sound which contains the audio from 'file'
     }
 
+    updateADSR();
+
 }
 
 void HelloSamplerAudioProcessor::loadFile(const juce::String& path) //loadfile path
@@ -227,6 +238,13 @@ void HelloSamplerAudioProcessor::loadFile(const juce::String& path) //loadfile p
 
 void HelloSamplerAudioProcessor::updateADSR()
 {
+
+    mADSRParams.attack = mAPVTS.getRawParameterValue("ATTACK")->load(); //using -> because getRawParameterValue returns a std::Atomic<float> *
+    mADSRParams.decay = mAPVTS.getRawParameterValue("DECAY")->load();
+    mADSRParams.sustain = mAPVTS.getRawParameterValue("SUSTAIN")->load();
+    mADSRParams.release = mAPVTS.getRawParameterValue("RELEASE")->load();
+
+
     //getting the number of sounds in the sampler
     for (int i = 0; i < mSampler.getNumSounds(); i++) {
 
@@ -240,6 +258,29 @@ void HelloSamplerAudioProcessor::updateADSR()
         }
     }
 }
+
+AudioProcessorValueTreeState::ParameterLayout HelloSamplerAudioProcessor::createParameters() //will return apvts parameter layout
+{
+
+    std::vector<std::unique_ptr<RangedAudioParameter>> parameters; //this is where we will create our parameters for our slider values
+
+    parameters.push_back(std::make_unique<AudioParameterFloat>("ATTACK", "Attack", 0.0f, 5.0f, 0.0f)); //Attack Parameter using ID this is connected toa ttack slider
+    parameters.push_back(std::make_unique<AudioParameterFloat>("DECAY", "Decay", 0.0f, 3.0f, 2.0f)); //Decay Parameter
+    parameters.push_back(std::make_unique<AudioParameterFloat>("SUSTAIN", "Sustain", 0.0f, 1.0f, 1.0f)); //Sustain Parameter
+    parameters.push_back(std::make_unique<AudioParameterFloat>("RELEASE", "Release", 0.0f, 5.0f, 2.0f)); //Release Parameter
+
+
+    return { parameters.begin(), parameters.end() };
+
+}
+
+void HelloSamplerAudioProcessor::valueTreePropertyChanged(juce::ValueTree& treeWhosePropertyHasChanged, const juce::Identifier& property)
+{
+
+    mShouldUpdate = true;
+
+}
+
 
 
 //==============================================================================
