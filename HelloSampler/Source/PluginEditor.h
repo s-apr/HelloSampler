@@ -10,11 +10,13 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "WaveThumbnail.h"
+#include "ADSRComponent.h"
 
 //==============================================================================
 /**
 */
-class HelloSamplerAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::FileDragAndDropTarget
+class HelloSamplerAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
     HelloSamplerAudioProcessorEditor (HelloSamplerAudioProcessor&);
@@ -24,20 +26,10 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
-    bool isInterestedInFileDrag(const juce::StringArray& files); //override;
-    void filesDropped(const juce::StringArray& files, int x, int y);
-
 private:
-    std::vector<float> mAudioPoints;
-    bool mShouldBePainting{ false };
 
-    juce::Slider mAttackSlider, mDecaySlider, mSustainSlider, mReleaseSlider; //defining slider classes
-    juce::Label mAttackLabel, mDecayLabel, mSustainLabel, mReleaseLabel; //displays text string
-
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mAttackAttachment;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mDecayAttachment;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mSustainAttachment;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mReleaseAttachment;
+    WaveThumbnail mWaveThumbnail;
+    ADSRComponent mADSRComponent;
 
     HelloSamplerAudioProcessor& audioProcessor; //reference to audioProcesser to access member variables
 
