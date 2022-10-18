@@ -164,6 +164,31 @@ void HelloSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
     }
 
+    //to create a playhead we need a specific pattern to get midi information
+    juce::MidiMessage m;
+    juce::MidiBuffer::Iterator it{ midiMessages };
+    int samplePos;
+
+    while (it.getNextEvent(m, samplePos))
+    {
+        if (m.isNoteOn()) 
+        {
+            //start playhead
+            mIsNotePlayed = true;
+        }
+        else if (m.isNoteOff())
+        {
+            //stop playhead
+            mIsNotePlayed = false;
+        }
+    } 
+
+    //is the note played? and if so for how long in samples
+    mSampleCount = mIsNotePlayed ? mSampleCount += buffer.getNumSamples() : 0;
+
+
+   
+
     mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
 }

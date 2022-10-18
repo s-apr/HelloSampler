@@ -65,6 +65,14 @@ void WaveThumbnail::paint (juce::Graphics& g)
 
         g.drawFittedText(mFileName, textBounds, juce::Justification::topRight, 1);
 
+        auto playHeadPosition = juce::jmap<int>(audioProcessor.SampleCount(), 0, audioProcessor.getWaveForm().getNumSamples(), 0, getWidth());
+
+        g.setColour(juce::Colours::white);
+        g.drawLine(playHeadPosition, 0, playHeadPosition, getHeight(), 2.0f);
+
+        g.setColour(juce::Colours::black.withAlpha(0.2f));
+        g.fillRect(0, 0, playHeadPosition, getHeight());
+
     }
     else
     {
@@ -74,6 +82,7 @@ void WaveThumbnail::paint (juce::Graphics& g)
         g.drawFittedText("Drop and Audio File to Load", getLocalBounds(), juce::Justification::centred, 1);
 
     }
+
 }
 
 void WaveThumbnail::resized()

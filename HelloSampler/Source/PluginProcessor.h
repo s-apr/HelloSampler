@@ -70,6 +70,9 @@ public:
 
     juce::AudioProcessorValueTreeState& getAPVTS() { return mAPVTS; } //using a getter to give access to the prvt APVTS class
 
+    std::atomic<bool>& isNotePlayed() { return mIsNotePlayed; }
+    std::atomic<int>& SampleCount() { return mSampleCount; }
+
 private:
     juce::Synthesiser mSampler; //'m' as member variable, have to use juce:: as header is not found
     const int mNumVoices{ 3 }; //number of sampler voices
@@ -86,6 +89,8 @@ private:
     void valueTreePropertyChanged(juce::ValueTree& treeWhosePropertyHasChanged, const juce::Identifier& property);
 
     std::atomic<bool> mShouldUpdate{ false };
+    std::atomic<bool> mIsNotePlayed{ false };
+    std::atomic<int> mSampleCount = {0};
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HelloSamplerAudioProcessor)

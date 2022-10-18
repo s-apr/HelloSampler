@@ -15,13 +15,16 @@ HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSampler
 {
         addAndMakeVisible(mWaveThumbnail); //makes WaveThumbnail visible in the GUI
         addAndMakeVisible(mADSRComponent);
+        
+        juce::Timer::startTimerHz (30);
+        
+        setSize (600, 400);
 
-    setSize (600, 400);
 }
 
 HelloSamplerAudioProcessorEditor::~HelloSamplerAudioProcessorEditor()
 {
-
+    juce::Timer::stopTimer();
 }
 
 //==============================================================================
@@ -35,4 +38,9 @@ void HelloSamplerAudioProcessorEditor::resized()
 {
     mWaveThumbnail.setBoundsRelative(0.0f, 0.25f, 1.0f, 0.5f); //is called when the waveform changes or the window is resized
     mADSRComponent.setBoundsRelative(0.0f, 0.75f, 1.0f, 0.25f);
+}
+
+void HelloSamplerAudioProcessorEditor::timerCallback()
+{
+    repaint();
 }
